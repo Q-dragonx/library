@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书馆管理系统 - 代码查看器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .repo-info {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .repo-info p {
+            margin-bottom: 5px;
+        }
+        
+        .repo-info a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        
+        .repo-info a:hover {
+            text-decoration: underline;
+        }
+        
+        .files-container {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .file-item {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .file-header {
+            padding: 15px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-header:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .file-name {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .file-content {
+            padding: 20px;
+            display: none;
+            background-color: #fafafa;
+        }
+        
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        /* 代码高亮 */
+        .keyword {
+            color: #c678dd;
+        }
+        
+        .string {
+            color: #98c379;
+        }
+        
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+        
+        .function {
+            color: #61afef;
+        }
+        
+        .class {
+            color: #e5c07b;
+        }
+        
+        .number {
+            color: #d19a66;
+        }
+        
+        .bool {
+            color: #56b6c2;
+        }
+        
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .button:hover {
+            background-color: #45a049;
+        }
+        
+        .toggle-icon {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-icon.open {
+            transform: rotate(180deg);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .file-content {
+                padding: 10px;
+            }
+            
+            pre {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>图书馆管理系统</h1>
+            <p>基于Flask的图书管理系统，实现用户管理、图书管理、借阅管理等功能</p>
+        </header>
+        
+        <div class="repo-info">
+            <p><strong>代码仓库：</strong><a href="https://github.com/xxx/library-system" target="_blank">https://github.com/xxx/library-system</a></p>
+            <p><strong>运行说明：</strong>详见项目 README.md 文件</p>
+        </div>
+        
+        <div class="files-container">
+            <!-- README.md -->
+            <div class="file-item">
+                <div class="file-header" onclick="toggleFile(this)">
+                    <span class="file-name">README.md</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="file-content">
+                    <pre><code># 图书馆管理系统
+
+## 项目介绍
+
+这是一个基于Flask的图书馆管理系统，用于实现图书馆的日常管理功能，包括图书管理、用户管理、借阅管理等。
+
+## 功能特点
+
+- **用户管理**：注册、登录、权限控制（普通用户/管理员）
+- **图书管理**：图书入库、查询、管理（仅管理员）
+- **借阅管理**：图书借阅、归还、借阅记录查询
+- **统计报表**：借阅排行榜、用户借阅统计
+
+## 技术栈
+
+- **后端框架**：Flask
+- **数据库**：SQLite（开发环境）/ PostgreSQL（生产环境）
+- **ORM**：SQLAlchemy
+- **模板引擎**：Jinja2
+- **前端**：HTML5, CSS3, Bootstrap
+
+## 安装与运行
+
+### 1. 安装依赖
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. 初始化数据库
+
+```bash
+python migrate.py
+```
+
+### 3. 运行应用
+
+```bash
+python app.py
+```
+
+### 4. 访问应用
+
+在浏览器中访问：http://localhost:5000
+
+## 默认管理员账号
+
+- 用户名：admin
+- 密码：admin123
+
+## 项目结构
+
+```
+library/
+├── app.py              # Flask应用入口
+├── extensions.py       # 扩展初始化
+├── models.py           # 数据模型定义
+├── migrate.py          # 数据库迁移脚本
+├── requirements.txt    # 项目依赖
+├── routes/             # 路由模块
+│   ├── __init__.py
+│   ├── auth.py         # 认证相关路由
+│   └── main.py         # 主要功能路由
+├── templates/          # 模板文件
+│   ├── base.html       # 基础模板
+│   ├── home.html       # 首页
+│   ├── register.html   # 注册页
+│   ├── login.html      # 登录页
+│   ├── books.html      # 图书列表
+│   ├── add_book.html   # 添加图书
+│   ├── my_borrows.html # 我的借阅
+│   └── borrow_rankings.html # 借阅排行榜
+└── instance/           # 实例文件夹（存放数据库文件）
+```
+
+## 测试
+
+运行测试：
+
+```bash
+pytest
+```
+
+## 开发规范
+
+1. 遵循PEP 8代码规范
+2. 使用Flask蓝图组织路由
+3. 数据库操作使用SQLAlchemy ORM
+4. 视图函数保持简洁，业务逻辑分离
+
+## 许可证
+
+MIT License</code></pre>
+                </div>
+            </div>
+
+            <!-- app.py -->
+            <div class="file-item">
+                <div class="file-header" onclick="toggleFile(this)">
+                    <span class="file-name">app.py</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="file-content">
+                    <pre><code>from flask import Flask
+from extensions import db, bcrypt, login_manager
+import os
+
+# 创建Flask应用
+app = Flask(__name__)
+
+# 配置应用
+app.config['SECRET_KEY'] = 'your-secret-key'
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(app.instance_path, 'library.db')}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# 确保实例文件夹存在
+os.makedirs(app.instance_path, exist_ok=True)
+
+# 初始化扩展
+db.init_app(app)
+bcrypt.init_app(app)
+login_manager.init_app(app)
+
+# 注册蓝图
+from routes.auth import auth
+from routes.main import main
+
+app.register_blueprint(auth, url_prefix='/')
+app.register_blueprint(main, url_prefix='/')
+
+# 入口点
+if __name__ == '__main__':
+    app.run(debug=True)</code></pre>
+                </div>
+            </div>
+
+            <!-- models.py -->
+            <div class="file-item">
+                <div class="file-header" onclick="toggleFile(this)">
+                    <span class="file-name">models.py</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="file-content">
+                    <pre><code>from extensions import db, login_manager
+from flask_login import UserMixin
+
+# 用户模型
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(60), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)  # 管理员权限
+    borrow_records = db.relationship('BorrowRecord', backref='user', lazy=True)
+
+# 图书模型
+class Book(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    isbn = db.Column(db.String(20), unique=True, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    author = db.Column(db.String(50), nullable=False)
+    publisher = db.Column(db.String(50), nullable=False)
+    location = db.Column(db.String(50), nullable=False)
+    stock = db.Column(db.Integer, default=0)
+    borrow_records = db.relationship('BorrowRecord', backref='book', lazy=True)
+
+# 借阅记录模型
+class BorrowRecord(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    borrow_date = db.Column(db.DateTime, nullable=False)
+    due_date = db.Column(db.DateTime, nullable=False)
+    return_date = db.Column(db.DateTime)
+    status = db.Column(db.String(20), default='借阅中')
+
+# 加载用户函数
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))</code></pre>
+                </div>
+            </div>
+
+            <!-- extensions.py -->
+            <div class="file-item">
+                <div class="file-header" onclick="toggleFile(this)">
+                    <span class="file-name">extensions.py</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="file-content">
+                    <pre><code>from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
+
+# 初始化扩展
+db = SQLAlchemy()
+bcrypt = Bcrypt()
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.login_message_category = 'info'</code></pre>
+                </div>
+            </div>
+
+            <!-- migrate.py -->
+            <div class="file-item">
+                <div class="file-header" onclick="toggleFile(this)">
+                    <span class="file-name">migrate.py</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="file-content">
+                    <pre><code>from app import app
+from extensions import db, bcrypt
+from models import User, Book, BorrowRecord
+
+# 创建应用上下文
+with app.app_context():
+    # 创建所有表
+    db.create_all()
+    
+    # 检查是否已有管理员用户
+    admin = User.query.filter_by(username='admin').first()
+    
+    if not admin:
+        # 创建管理员用户
+        hashed_password = bcrypt.generate_password_hash('admin123').decode('utf-8')
+        admin = User(username='admin', email='admin@library.com', password=hashed_password, is_admin=True)
+        db.session.add(admin)
+        db.session.commit()
+        print('管理员用户创建成功')
+    else:
+        print('管理员用户已存在')
+    
+    print('数据库初始化完成')</code></pre>
+                </div>
+            </div>
+
+            <!-- requirements.txt -->
+            <div class="file-item">
+                <div class="file-header" onclick="toggleFile(this)">
+                    <span class="file-name">requirements.txt</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="file-content">
+                    <pre><code>Flask==2.0.1
+Flask-SQLAlchemy==2.5.1
+Flask-Bcrypt==0.7.1
+Flask-Login==0.5.0
+pytest==6.2.4
+Werkzeug==2.0.1</code></pre>
+                </div>
+            </div>
+
+            <!-- routes/auth.py -->
+            <div class="file-item">
+                <div class="file-header" onclick="toggleFile(this)">
+                    <span class="file-name">routes/auth.py</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="file-content">
+                    <pre><code>from flask import render_template, url_for, flash, redirect, request, Blueprint
+from extensions import db, bcrypt
+from models import User
+from flask_login import login_user, current_user, logout_user, login_required
+
+# 创建蓝图
+auth = Blueprint('auth', __name__)
+
+# 注册路由
+@auth.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.home'))
+    
+    if request.method == 'POST':
+        # 获取表单数据
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        
+        # 验证密码
+        if password != confirm_password:
+            flash('两次输入的密码不一致', 'danger')
+            return redirect(url_for('auth.register'))
+        
+        # 检查用户名是否已存在
+        user_exists = User.query.filter_by(username=username).first()
+        if user_exists:
+            flash('用户名已被使用', 'danger')
+            return redirect(url_for('auth.register'))
+        
+        # 检查邮箱是否已存在
+        email_exists = User.query.filter_by(email=email).first()
+        if email_exists:
+            flash('邮箱已被注册', 'danger')
+            return redirect(url_for('auth.register'))
+        
+        # 创建新用户
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        user = User(username=username, email=email, password=hashed_password)
+        
+        # 添加到数据库
+        db.session.add(user)
+        db.session.commit()
+        
+        flash('注册成功！请登录', 'success')
+        return redirect(url_for('auth.login'))
+    
+    return render_template('register.html')
+
+# 登录路由
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.home'))
+    
+    if request.method == 'POST':
+        # 获取表单数据
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        # 查询用户
+        user = User.query.filter_by(username=username).first()
+        
+        # 验证用户和密码
+        if user and bcrypt.check_password_hash(user.password, password):
+            login_user(user)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('main.home'))
+        else:
+            flash('用户名或密码错误', 'danger')
+    
+    return render_template('login.html')
+
+# 登出路由
+@auth.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('main.home'))</code></pre>
+                </div>
+            </div>
+
+            <!-- routes/main.py -->
+            <div class="file-item">
+                <div class="file-header" onclick="toggleFile(this)">
+                    <span class="file-name">routes/main.py</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="file-content">
+                    <pre><code>from flask import render_template, url_for, flash, redirect, request, Blueprint
+from extensions import db
+from models import User, Book, BorrowRecord
+from flask_login import login_required, current_user
+from datetime import datetime, timedelta
+
+# 创建蓝图
+main = Blueprint('main', __name__)
+
+# 主页
+@main.route('/')
+def home():
+    return render_template('home.html')
+
+# 图书入库（仅管理员）
+@main.route('/books/add', methods=['GET', 'POST'])
+@login_required
+def add_book():
+    if not current_user.is_admin:
+        flash('Access denied. Only administrators can add books', 'danger')
+        return redirect(url_for('main.home'))
+    
+    if request.method == 'POST':
+        isbn = request.form.get('isbn')
+        title = request.form.get('title')
+        author = request.form.get('author')
+        publisher = request.form.get('publisher')
+        location = request.form.get('location')
+        stock = request.form.get('stock')
+        
+        # 检查ISBN是否已存在
+        book_exists = Book.query.filter_by(isbn=isbn).first()
+        if book_exists:
+            flash('Book with this ISBN already exists', 'danger')
+            return redirect(url_for('main.add_book'))
+        
+        # 创建新图书
+        book = Book(isbn=isbn, title=title, author=author, publisher=publisher, location=location, stock=int(stock))
+        db.session.add(book)
+        db.session.commit()
+        
+        flash('Book added successfully!', 'success')
+        return redirect(url_for('main.books'))
+    
+    return render_template('add_book.html')
+
+# 图书列表（支持查询和分页）
+@main.route('/books')
+def books():
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    
+    # 处理查询参数
+    search = request.args.get('search', '')
+    filter_by = request.args.get('filter_by', 'title')
+    
+    # 构建查询
+    if search:
+        if filter_by == 'title':
+            books = Book.query.filter(Book.title.ilike(f'%{search}%')).paginate(page=page, per_page=per_page)
+        elif filter_by == 'author':
+            books = Book.query.filter(Book.author.ilike(f'%{search}%')).paginate(page=page, per_page=per_page)
+        elif filter_by == 'isbn':
+            books = Book.query.filter(Book.isbn.ilike(f'%{search}%')).paginate(page=page, per_page=per_page)
+        elif filter_by == 'publisher':
+            books = Book.query.filter(Book.publisher.ilike(f'%{search}%')).paginate(page=page, per_page=per_page)
+        else:
+            books = Book.query.paginate(page=page, per_page=per_page)
+    else:
+        books = Book.query.paginate(page=page, per_page=per_page)
+    
+    return render_template('books.html', books=books, search=search, filter_by=filter_by)
+
+# 借书功能
+@main.route('/books/<int:book_id>/borrow')
+@login_required
+def borrow_book(book_id):
+    book = Book.query.get_or_404(book_id)
+    
+    # 检查库存
+    if book.stock <= 0:
+        flash('Book is out of stock', 'danger')
+        return redirect(url_for('main.books'))
+    
+    # 检查用户是否已有未归还的该书
+    existing_borrow = BorrowRecord.query.filter_by(user_id=current_user.id, book_id=book_id, status='借阅中').first()
+    if existing_borrow:
+        flash('You already have this book checked out', 'danger')
+        return redirect(url_for('main.books'))
+    
+    # 创建借阅记录
+    borrow_date = datetime.utcnow()
+    due_date = borrow_date + timedelta(days=30)  # 默认借阅30天
+    
+    borrow_record = BorrowRecord(
+        user_id=current_user.id,
+        book_id=book_id,
+        borrow_date=borrow_date,
+        due_date=due_date,
+        status='借阅中'
+    )
+    
+    # 更新库存
+    book.stock -= 1
+    
+    db.session.add(borrow_record)
+    db.session.commit()
+    
+    flash(f'You have successfully borrowed "{book.title}"', 'success')
+    return redirect(url_for('main.books'))
+
+# 还书功能
+@main.route('/books/<int:book_id>/return')
+@login_required
+def return_book(book_id):
+    # 查找未归还的借阅记录
+    borrow_record = BorrowRecord.query.filter_by(user_id=current_user.id, book_id=book_id, status='借阅中').first()
+    
+    if not borrow_record:
+        flash('No active borrow record found for this book', 'danger')
+        return redirect(url_for('main.books'))
+    
+    # 更新借阅记录
+    borrow_record.return_date = datetime.utcnow()
+    borrow_record.status = '已归还'
+    
+    # 更新图书库存
+    book = Book.query.get_or_404(book_id)
+    book.stock += 1
+    
+    # 检查是否逾期
+    if borrow_record.return_date > borrow_record.due_date:
+        days_overdue = (borrow_record.return_date - borrow_record.due_date).days
+        flash(f'Book returned successfully, but you were {days_overdue} days overdue', 'warning')
+    else:
+        flash(f'Book "{book.title}" returned successfully', 'success')
+    
+    db.session.commit()
+    return redirect(url_for('main.my_borrows'))
+
+# 我的借阅记录
+@main.route('/my_borrows')
+@login_required
+def my_borrows():
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    
+    borrows = BorrowRecord.query.filter_by(user_id=current_user.id).order_by(BorrowRecord.borrow_date.desc()).paginate(page=page, per_page=per_page)
+    
+    return render_template('my_borrows.html', borrows=borrows)
+
+# 统计报表 - 借阅排行榜
+@main.route('/reports/borrow_rankings')
+@login_required
+def borrow_rankings():
+    if not current_user.is_admin:
+        flash('Access denied. Only administrators can view reports', 'danger')
+        return redirect(url_for('main.home'))
+    
+    # 获取借阅排行榜
+    from sqlalchemy import func
+    
+    # 按图书分组统计借阅次数
+    book_rankings = db.session.query(
+        Book.title,
+        func.count(BorrowRecord.id).label('borrow_count')
+    ).join(BorrowRecord, Book.id == BorrowRecord.book_id)
+    
+    # 按用户分组统计借阅次数
+    user_rankings = db.session.query(
+        User.username,
+        func.count(BorrowRecord.id).label('borrow_count')
+    ).join(BorrowRecord, User.id == BorrowRecord.user_id)
+    
+    # 按月统计
+    month = request.args.get('month')
+    year = request.args.get('year')
+    
+    if month and year:
+        start_date = datetime(int(year), int(month), 1)
+        if int(month) == 12:
+            end_date = datetime(int(year) + 1, 1, 1)
+        else:
+            end_date = datetime(int(year), int(month) + 1, 1)
+        
+        book_rankings = book_rankings.filter(BorrowRecord.borrow_date >= start_date, BorrowRecord.borrow_date < end_date)
+        user_rankings = user_rankings.filter(BorrowRecord.borrow_date >= start_date, BorrowRecord.borrow_date < end_date)
+    
+    # 按季度统计
+    quarter = request.args.get('quarter')
+    year = request.args.get('year')
+    
+    if quarter and year:
+        quarter = int(quarter)
+        start_month = (quarter - 1) * 3 + 1
+        end_month = quarter * 3 + 1
+        start_date = datetime(int(year), start_month, 1)
+        if end_month > 12:
+            end_date = datetime(int(year) + 1, 1, 1)
+        else:
+            end_date = datetime(int(year), end_month, 1)
+        
+        book_rankings = book_rankings.filter(BorrowRecord.borrow_date >= start_date, BorrowRecord.borrow_date < end_date)
+        user_rankings = user_rankings.filter(BorrowRecord.borrow_date >= start_date, BorrowRecord.borrow_date < end_date)
+    
+    # 执行查询并排序
+    book_rankings = book_rankings.group_by(Book.id).order_by(func.count(BorrowRecord.id).desc()).limit(10).all()
+    user_rankings = user_rankings.group_by(User.id).order_by(func.count(BorrowRecord.id).desc()).limit(10).all()
+    
+    return render_template('borrow_rankings.html', book_rankings=book_rankings, user_rankings=user_rankings)</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 切换文件内容显示/隐藏
+        function toggleFile(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('.toggle-icon');
+            
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                icon.classList.remove('open');
+            } else {
+                content.style.display = 'block';
+                icon.classList.add('open');
+            }
+        }
+    </script>
+</body>
+</html>
